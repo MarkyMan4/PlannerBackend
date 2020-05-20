@@ -40,6 +40,24 @@ class ProjectViewSet(viewsets.ModelViewSet):
         return Response(response, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=True)
+    def update_project(self, request, pk):
+        try:
+            proj = Project.objects.get(id=pk)
+            proj.name = request.data['name']
+            proj.description = request.data['description']
+            proj.start_date = request.data['start_date']
+            proj.end_date = request.data['end_date']
+            proj.save()
+
+            serializer = ProjectSerializer(proj, many=False)
+            response = {'message': 'project has been updated', 'result': serializer.data}
+
+            return Response(response, status=status.HTTP_200_OK)
+        except:
+            response = {'message': 'failed to update project'}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(methods=['POST'], detail=True)
     def allocate_time(self, request, pk=None):
         if 'percent_allocated' in request.data:
             project = Project.objects.get(id=pk)
