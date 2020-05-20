@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 class Project(models.Model):
     name = models.CharField(max_length=80)
+    description = models.CharField(max_length=4000, default='')
     start_date = models.DateField()
     end_date = models.DateField()
     active = models.BooleanField(default=True)
